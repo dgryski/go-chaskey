@@ -139,8 +139,8 @@ func rotl32(x uint32, b uint) uint32 {
 
 func timestwo(out []uint32, in []uint32) {
 	var C = [2]uint32{0x00, 0x87}
-	out[0] = (in[0] << 1) | (in[1] >> 31)
-	out[1] = (in[1] << 1) | (in[2] >> 31)
-	out[2] = (in[2] << 1) | (in[3] >> 31)
-	out[3] = (in[3] << 1) ^ C[in[0]>>31]
+	out[0] = (in[0] << 1) ^ C[in[3]>>31]
+	out[1] = (in[1] << 1) | (in[0] >> 31)
+	out[2] = (in[2] << 1) | (in[1] >> 31)
+	out[3] = (in[3] << 1) | (in[2] >> 31)
 }
