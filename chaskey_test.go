@@ -3,6 +3,8 @@ package chaskey
 import (
 	"encoding/binary"
 	"testing"
+
+	"github.com/dchest/siphash"
 )
 
 var vectors = [64][4]uint32{
@@ -98,3 +100,41 @@ func TestVectors(t *testing.T) {
 		}
 	}
 }
+
+func benchmarkChaskey(b *testing.B, size int) {
+
+	buf := make([]byte, size)
+
+	var k H
+
+	var t [16]byte
+
+	for i := 0; i < b.N; i++ {
+		k.MAC(buf, t[:])
+	}
+}
+
+func BenchmarkChaskey16(b *testing.B)   { benchmarkChaskey(b, 16) }
+func BenchmarkChaskey32(b *testing.B)   { benchmarkChaskey(b, 32) }
+func BenchmarkChaskey64(b *testing.B)   { benchmarkChaskey(b, 64) }
+func BenchmarkChaskey512(b *testing.B)  { benchmarkChaskey(b, 512) }
+func BenchmarkChaskey1024(b *testing.B) { benchmarkChaskey(b, 1024) }
+func BenchmarkChaskey2048(b *testing.B) { benchmarkChaskey(b, 2048) }
+
+var sipResult uint64
+
+func benchmarkSiphash(b *testing.B, size int) {
+
+	buf := make([]byte, size)
+
+	for i := 0; i < b.N; i++ {
+		sipResult = siphash.Hash(0, 0, buf)
+	}
+}
+
+func BenchmarkSiphash16(b *testing.B)   { benchmarkSiphash(b, 16) }
+func BenchmarkSiphash32(b *testing.B)   { benchmarkSiphash(b, 32) }
+func BenchmarkSiphash64(b *testing.B)   { benchmarkSiphash(b, 64) }
+func BenchmarkSiphash512(b *testing.B)  { benchmarkSiphash(b, 512) }
+func BenchmarkSiphash1024(b *testing.B) { benchmarkSiphash(b, 1024) }
+func BenchmarkSiphash2048(b *testing.B) { benchmarkSiphash(b, 2048) }
