@@ -5,6 +5,8 @@ http://mouha.be/chaskey/
 
 http://eprint.iacr.org/2014/386.pdf
 
+Key recovery attack against chaskey: https://eprint.iacr.org/2015/811
+
 */
 package chaskey
 
