@@ -17,13 +17,20 @@ type H struct {
 	k  [4]uint32
 	k1 [4]uint32
 	k2 [4]uint32
+	r  int
 }
 
-// New returns a new chaskey hasher.
-func New(k [4]uint32) *H {
+// New returns a new 8-round chaskey hasher.
+func New(k [4]uint32) *H { return newH(k, 8) }
+
+// New12 returns a new 12-round chaskey hasher.
+func New12(k [4]uint32) *H { return newH(k, 12) }
+
+func newH(k [4]uint32, rounds int) *H {
 
 	h := H{
 		k: k,
+		r: rounds,
 	}
 
 	timestwo(h.k1[:], k[:])
@@ -49,7 +56,7 @@ func (h *H) MAC(m, tag []byte) []byte {
 		v[3] ^= binary.LittleEndian.Uint32(m[12:])
 
 		// permute
-		for i := 0; i < 8; i++ {
+		for i := 0; i < h.r; i++ {
 			// round
 			v[0] += v[1]
 			v[1] = rotl32(v[1], 5)
@@ -103,7 +110,7 @@ func (h *H) MAC(m, tag []byte) []byte {
 	v[3] ^= l[3]
 
 	// permute
-	for i := 0; i < 8; i++ {
+	for i := 0; i < h.r; i++ {
 		// round
 		v[0] += v[1]
 		v[1] = rotl32(v[1], 5)
@@ -119,7 +126,6 @@ func (h *H) MAC(m, tag []byte) []byte {
 		v[1] = rotl32(v[1], 7)
 		v[1] ^= v[2]
 		v[2] = rotl32(v[2], 16)
-
 	}
 
 	v[0] ^= l[0]
