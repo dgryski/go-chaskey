@@ -177,6 +177,8 @@ func benchmarkChaskey(b *testing.B, size int) {
 
 	var k H
 
+	k.r = 8
+
 	var t [16]byte
 
 	for i := 0; i < b.N; i++ {
