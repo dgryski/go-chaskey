@@ -179,6 +179,8 @@ func benchmarkChaskey(b *testing.B, size int) {
 
 	k.r = 8
 
+	b.SetBytes(int64(size))
+
 	var t [16]byte
 
 	for i := 0; i < b.N; i++ {
@@ -198,6 +200,8 @@ var sipResult uint64
 func benchmarkSiphash(b *testing.B, size int) {
 
 	buf := make([]byte, size)
+
+	b.SetBytes(int64(size))
 
 	for i := 0; i < b.N; i++ {
 		sipResult = siphash.Hash(0, 0, buf)
