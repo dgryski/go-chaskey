@@ -48,10 +48,6 @@ func (h *H) MAC(m, tag []byte) []byte {
 	return tag[:16]
 }
 
-func rotl32(x uint32, b uint) uint32 {
-	return (x >> (32 - b)) | (x << b)
-}
-
 func timestwo(out []uint32, in []uint32) {
 	var C = [2]uint32{0x00, 0x87}
 	out[0] = (in[0] << 1) ^ C[in[3]>>31]
