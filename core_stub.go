@@ -2,7 +2,7 @@
 
 package chaskey
 
-//go:generate python -m peachpy.x86_64 core.py -S -o core_amd64.s -mabi=goasm
+//go:generate go run asm.go -out core_amd64.s
 //go:noescape
 
 func chaskeyCore(h *H, m []byte, tag []byte)
