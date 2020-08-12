@@ -9,32 +9,32 @@ import (
 
 func chaskeyCore(h *H, m []byte, tag []byte) {
 
-	v := h.k
+	v0, v1, v2, v3 := h.k[0], h.k[1], h.k[2], h.k[3]
 
 	for ; len(m) > 16; m = m[16:] {
 
-		v[0] ^= binary.LittleEndian.Uint32(m[0:4])
-		v[1] ^= binary.LittleEndian.Uint32(m[4:8])
-		v[2] ^= binary.LittleEndian.Uint32(m[8:12])
-		v[3] ^= binary.LittleEndian.Uint32(m[12:16])
+		v0 ^= binary.LittleEndian.Uint32(m[0:4])
+		v1 ^= binary.LittleEndian.Uint32(m[4:8])
+		v2 ^= binary.LittleEndian.Uint32(m[8:12])
+		v3 ^= binary.LittleEndian.Uint32(m[12:16])
 
 		// permute
 		for i := 0; i < h.r; i++ {
 			// round
-			v[0] += v[1]
-			v[1] = bits.RotateLeft32(v[1], 5)
-			v[1] ^= v[0]
-			v[0] = bits.RotateLeft32(v[0], 16)
-			v[2] += v[3]
-			v[3] = bits.RotateLeft32(v[3], 8)
-			v[3] ^= v[2]
-			v[0] += v[3]
-			v[3] = bits.RotateLeft32(v[3], 13)
-			v[3] ^= v[0]
-			v[2] += v[1]
-			v[1] = bits.RotateLeft32(v[1], 7)
-			v[1] ^= v[2]
-			v[2] = bits.RotateLeft32(v[2], 16)
+			v0 += v1
+			v2 += v3
+			v1 = bits.RotateLeft32(v1, 5)
+			v3 = bits.RotateLeft32(v3, 8)
+			v1 ^= v0
+			v3 ^= v2
+			v0 = bits.RotateLeft32(v0, 16)
+			v0 += v3
+			v2 += v1
+			v3 = bits.RotateLeft32(v3, 13)
+			v1 = bits.RotateLeft32(v1, 7)
+			v3 ^= v0
+			v1 ^= v2
+			v2 = bits.RotateLeft32(v2, 16)
 		}
 	}
 
@@ -62,45 +62,45 @@ func chaskeyCore(h *H, m []byte, tag []byte) {
 		lastblock[3] = binary.LittleEndian.Uint32(lb[12:16])
 	}
 
-	v[0] ^= lastblock[0]
-	v[1] ^= lastblock[1]
-	v[2] ^= lastblock[2]
-	v[3] ^= lastblock[3]
+	v0 ^= lastblock[0]
+	v1 ^= lastblock[1]
+	v2 ^= lastblock[2]
+	v3 ^= lastblock[3]
 
-	v[0] ^= l[0]
-	v[1] ^= l[1]
-	v[2] ^= l[2]
-	v[3] ^= l[3]
+	v0 ^= l[0]
+	v1 ^= l[1]
+	v2 ^= l[2]
+	v3 ^= l[3]
 
 	// permute
 	for i := 0; i < h.r; i++ {
 		// round
-		v[0] += v[1]
-		v[1] = bits.RotateLeft32(v[1], 5)
-		v[1] ^= v[0]
-		v[0] = bits.RotateLeft32(v[0], 16)
-		v[2] += v[3]
-		v[3] = bits.RotateLeft32(v[3], 8)
-		v[3] ^= v[2]
-		v[0] += v[3]
-		v[3] = bits.RotateLeft32(v[3], 13)
-		v[3] ^= v[0]
-		v[2] += v[1]
-		v[1] = bits.RotateLeft32(v[1], 7)
-		v[1] ^= v[2]
-		v[2] = bits.RotateLeft32(v[2], 16)
+		v0 += v1
+		v2 += v3
+		v1 = bits.RotateLeft32(v1, 5)
+		v3 = bits.RotateLeft32(v3, 8)
+		v1 ^= v0
+		v3 ^= v2
+		v0 = bits.RotateLeft32(v0, 16)
+		v0 += v3
+		v2 += v1
+		v3 = bits.RotateLeft32(v3, 13)
+		v1 = bits.RotateLeft32(v1, 7)
+		v3 ^= v0
+		v1 ^= v2
+		v2 = bits.RotateLeft32(v2, 16)
 	}
 
-	v[0] ^= l[0]
-	v[1] ^= l[1]
-	v[2] ^= l[2]
-	v[3] ^= l[3]
+	v0 ^= l[0]
+	v1 ^= l[1]
+	v2 ^= l[2]
+	v3 ^= l[3]
 
 	_ = tag[15]
 
-	binary.LittleEndian.PutUint32(tag[0:4], v[0])
-	binary.LittleEndian.PutUint32(tag[4:8], v[1])
-	binary.LittleEndian.PutUint32(tag[8:12], v[2])
-	binary.LittleEndian.PutUint32(tag[12:16], v[3])
+	binary.LittleEndian.PutUint32(tag[0:4], v0)
+	binary.LittleEndian.PutUint32(tag[4:8], v1)
+	binary.LittleEndian.PutUint32(tag[8:12], v2)
+	binary.LittleEndian.PutUint32(tag[12:16], v3)
 
 }

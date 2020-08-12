@@ -24,17 +24,17 @@ loop0_begin:
 
 loop1_begin:
 	ADDL CX, AX
-	ROLL $0x05, CX
-	XORL AX, CX
-	ROLL $0x10, AX
 	ADDL BX, DX
+	ROLL $0x05, CX
 	ROLL $0x08, BX
+	XORL AX, CX
 	XORL DX, BX
+	ROLL $0x10, AX
 	ADDL BX, AX
-	ROLL $0x0d, BX
-	XORL AX, BX
 	ADDL CX, DX
+	ROLL $0x0d, BX
 	ROLL $0x07, CX
+	XORL AX, BX
 	XORL DX, CX
 	ROLL $0x10, DX
 	DECQ R9
@@ -45,7 +45,6 @@ loop1_begin:
 	JG   loop0_begin
 
 loop0_end:
-	MOVQ BP, BP
 	CMPQ R8, $0x10
 	JNZ  switch
 	ADDQ $0x10, BP
@@ -167,21 +166,20 @@ afterSwitch:
 	XORL 4(BP), CX
 	XORL 8(BP), DX
 	XORL 12(BP), BX
-	MOVQ SI, SI
 
 loop2_begin:
 	ADDL CX, AX
-	ROLL $0x05, CX
-	XORL AX, CX
-	ROLL $0x10, AX
 	ADDL BX, DX
+	ROLL $0x05, CX
 	ROLL $0x08, BX
+	XORL AX, CX
 	XORL DX, BX
+	ROLL $0x10, AX
 	ADDL BX, AX
-	ROLL $0x0d, BX
-	XORL AX, BX
 	ADDL CX, DX
+	ROLL $0x0d, BX
 	ROLL $0x07, CX
+	XORL AX, BX
 	XORL DX, CX
 	ROLL $0x10, DX
 	DECQ SI
